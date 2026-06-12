@@ -1,0 +1,7 @@
+configuration,no_attack_accuracy_pct,byzantine_20pct_accuracy_pct,notes
+Vanilla FedAvg,89.9,71.4,baseline - no Byzantine defense
+Classical Krum defense,89.1,81.7,Krum aggregation rule (requires trusted reference dataset)
+QuantumShieldEdge (ours),88.6,85.2,QKD-secured + VQAD soft-weighting
+# Source: Table I (Section VI-B) -- CIFAR-10 Dirichlet alpha=0.5 -- 100 FL rounds -- 50-node testbed
+# Averaged over 5 independent seeds; std dev within 0.3 pp for accuracy
+# Byzantine scenario: 20% participants executing min-max gradient poisoning

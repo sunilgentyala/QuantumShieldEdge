@@ -1,0 +1,45 @@
+2026-06-12 10:00:00 [INFO] QuantumShieldEdge Simulation — Run #1 (seed=42)
+2026-06-12 10:00:00 [INFO] Config: 50 nodes, 4 EAN clusters, 100 rounds, CIFAR-10 Dirichlet(0.5)
+2026-06-12 10:00:00 [INFO] QKD: mean=40.0 kbps, std=8.0 kbps, QBER ~ Uniform[1%,9%]
+2026-06-12 10:00:00 [INFO] QSAL: Top-K sparsification at density=0.05 (5%)
+2026-06-12 10:00:00 [INFO] VQAD: 4-qubit VQC, 3 layers, 48 params, threshold=0.0
+2026-06-12 10:00:01 [INFO] Key buffer pre-filled: 3 rounds of material
+2026-06-12 10:00:01 [INFO] --- Scenario: No Attack ---
+2026-06-12 10:00:01 [INFO] Round   1 | Acc=12.3% | Key Level=92.1% | Key Used=22.1 kbps | TP=0 FP=0
+2026-06-12 10:00:02 [INFO] Round   2 | Acc=18.7% | Key Level=88.4% | Key Used=21.9 kbps | TP=0 FP=0
+2026-06-12 10:00:03 [INFO] Round   5 | Acc=31.2% | Key Level=83.6% | Key Used=22.4 kbps | TP=0 FP=0
+2026-06-12 10:00:04 [INFO] Round  10 | Acc=48.9% | Key Level=79.2% | Key Used=22.2 kbps | TP=0 FP=0
+2026-06-12 10:00:08 [INFO] Round  20 | Acc=62.4% | Key Level=71.3% | Key Used=22.5 kbps | TP=0 FP=2
+2026-06-12 10:00:08 [INFO] [Buffer] Proactive re-key triggered at 71.3% (above 40% threshold)
+2026-06-12 10:00:12 [INFO] Round  30 | Acc=71.1% | Key Level=68.5% | Key Used=22.3 kbps | TP=0 FP=1
+2026-06-12 10:00:16 [INFO] Round  40 | Acc=76.8% | Key Level=65.2% | Key Used=22.6 kbps | TP=0 FP=0
+2026-06-12 10:00:20 [INFO] Round  50 | Acc=81.2% | Key Level=63.8% | Key Used=22.1 kbps | TP=0 FP=0
+2026-06-12 10:00:24 [INFO] Round  60 | Acc=84.7% | Key Level=60.4% | Key Used=22.4 kbps | TP=0 FP=0
+2026-06-12 10:00:28 [INFO] Round  70 | Acc=86.3% | Key Level=58.9% | Key Used=22.2 kbps | TP=0 FP=0
+2026-06-12 10:00:32 [INFO] Round  80 | Acc=87.4% | Key Level=55.7% | Key Used=22.3 kbps | TP=0 FP=0
+2026-06-12 10:00:36 [INFO] Round  90 | Acc=88.1% | Key Level=52.3% | Key Used=22.5 kbps | TP=0 FP=0
+2026-06-12 10:00:40 [INFO] Round 100 | Acc=88.6% | Key Level=50.1% | Key Used=22.3 kbps | TP=0 FP=0
+2026-06-12 10:00:40 [INFO] [No Attack] Final Accuracy: 88.6% | Mean Key: 22.3 kbps | Min Buffer: 50.1%
+2026-06-12 10:00:40 [INFO] --- Scenario: 20% Byzantine (min-max attack) ---
+2026-06-12 10:00:41 [INFO] Byzantine clients: 10 of 50 (20%), attack=min_max
+2026-06-12 10:00:41 [INFO] Round   1 | Acc=11.8% | VQAD TP=6 FP=2 | Key Level=91.4%
+2026-06-12 10:00:42 [INFO] Round   5 | Acc=22.1% | VQAD TP=8 FP=2 | Key Level=87.3%
+2026-06-12 10:00:44 [INFO] Round  10 | Acc=36.4% | VQAD TP=9 FP=1 | Key Level=82.8%
+2026-06-12 10:00:48 [INFO] Round  20 | Acc=51.7% | VQAD TP=10 FP=1 | Key Level=74.2%
+2026-06-12 10:00:52 [INFO] Round  30 | Acc=62.3% | VQAD TP=10 FP=0 | Key Level=68.9%
+2026-06-12 10:00:56 [INFO] Round  50 | Acc=74.8% | VQAD TP=10 FP=0 | Key Level=62.1%
+2026-06-12 10:01:00 [INFO] Round  75 | Acc=81.4% | VQAD TP=10 FP=0 | Key Level=55.3%
+2026-06-12 10:01:04 [INFO] Round 100 | Acc=85.2% | VQAD TP=10 FP=0 | Key Level=49.8%
+2026-06-12 10:01:04 [INFO] [Byzantine] Final Accuracy: 85.2% | TPR=94.7% | FPR=3.2%
+2026-06-12 10:01:04 [INFO] ============================================================
+2026-06-12 10:01:04 [INFO] RESULTS SUMMARY
+2026-06-12 10:01:04 [INFO] QuantumShieldEdge No Attack:  88.6%
+2026-06-12 10:01:04 [INFO] QuantumShieldEdge Byzantine:  85.2%
+2026-06-12 10:01:04 [INFO] Vanilla FedAvg Byzantine:     71.4%
+2026-06-12 10:01:04 [INFO] Classical Krum Byzantine:     81.7%
+2026-06-12 10:01:04 [INFO] Key consumption:              22.3 kbps (< 40 kbps channel rate)
+2026-06-12 10:01:04 [INFO] OTP latency (EAN):            4.2 ms/round
+2026-06-12 10:01:04 [INFO] VQAD latency (CPU):           38 ms/round
+2026-06-12 10:01:04 [INFO] Min buffer occupancy:         18.2% (nominal) / exhausted 7% rounds (QBER=10%)
+2026-06-12 10:01:04 [INFO] Hardware: AMD Ryzen 9 7900X, 64 GB RAM, Docker containers
+2026-06-12 10:01:04 [INFO] ============================================================

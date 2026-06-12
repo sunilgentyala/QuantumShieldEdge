@@ -1,0 +1,16 @@
+metric,value,unit,notes
+mean_key_consumption,22.3,kbps,5% sparsification - 100 rounds average
+mean_qkd_channel_rate,40.0,kbps,sampled from N(40 64) - metropolitan QKD
+min_buffer_occupancy_normal,18.0,percent,never dropped below 18% in nominal runs
+rekey_threshold,40.0,percent,proactive re-key trigger level
+k_min_analytical,29.3,kbps,Equation (3): 1.1 * 400K * 4 / 60
+sparsification_density,5.0,percent,Top-K with K/M=0.05
+model_size_before_sparse,8000.0,kbit,500K params * 16-bit (full model reference)
+model_size_after_sparse,400.0,kbit,at 5% density
+otp_encryption_latency_ean,4.2,ms,per round average
+vqad_inference_latency_cpu,38.0,ms,PennyLane CPU simulator per round
+buffer_underrun_rate_nominal,0.0,percent,zero underruns under normal QBER
+buffer_underrun_rate_stress,7.0,percent,QBER=10% stress test (above BB84 abort threshold)
+qber_range,1-9,percent,sampled uniformly per round (nominal)
+qber_stress_test,10,percent,above standard BB84 abort threshold (11%)
+# Source: Sections V-B and VI-D/E

@@ -1,0 +1,10 @@
+metric,value,unit,notes
+true_positive_rate,94.7,percent,over 100 FL rounds all attack types
+false_positive_rate,3.2,percent,concentrated in rounds 1-20
+false_positive_rate_after_round20,<1.0,percent,once gradient variance stabilises
+attack_types_evaluated,"min_max,label_flip,sign_flip",categorical,no retraining required
+n_qubits,4,count,four-qubit VQC ansatz
+n_trainable_params,48,count,N_LAYERS*N_QUBITS*2
+n_ansatz_layers,3,count,Ry+Rz per qubit + CNOT brick-wall
+circuit_evaluations_per_round,48,count,tractable on near-term QPUs
+# Source: Section VI-C -- VQAD generalises across attack variants without retraining

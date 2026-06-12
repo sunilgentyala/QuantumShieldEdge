@@ -1,0 +1,64 @@
+# QuantumShieldEdge — default experiment configuration
+# Reproduces the results in Table I (Section VI-B) and Sections VI-C/D/E
+
+simulation:
+  n_nodes: 50               # total IoT leaf clients
+  n_clusters: 4             # EAN clusters
+  nodes_per_cluster:        # 10-15 per cluster (heterogeneous)
+    - 13
+    - 12
+    - 13
+    - 12
+  n_rounds: 100             # FL training rounds
+  round_duration_sec: 60    # T_r in Equation (1)
+  n_seeds: 5                # independent runs for averaging
+
+model:
+  name: LightweightCNN
+  dataset: CIFAR-10
+  dirichlet_alpha: 0.5      # non-IID data distribution
+  local_epochs: 2
+  batch_size: 32
+  learning_rate: 0.01
+  momentum: 0.9
+
+qkd:
+  mean_kbps: 40.0           # N(40, 64) key rate in kbps
+  std_kbps: 8.0
+  qber_min: 0.01            # QBER sampled uniformly from [1%, 9%]
+  qber_max: 0.09
+  buffer_capacity_bits: 10000000   # 10 Mbit pre-fill
+  rekey_threshold: 0.40     # trigger re-key at 40% occupancy
+  prefill_rounds: 3
+
+qsal:
+  sparsification_density: 0.05    # Top-K at K/M = 5%
+  overhead_factor: 1.1            # alpha in Equation (1)
+
+vqad:
+  n_qubits: 4
+  n_layers: 3
+  n_params: 24              # N_LAYERS * N_QUBITS * 2
+  byzantine_weight: 0.1     # soft-weight for flagged updates
+  detection_threshold: 0.0  # <Z> < 0 => Byzantine
+  training_epochs: 100
+  learning_rate: 0.01
+
+attack:
+  byzantine_fraction: 0.20  # 20% Byzantine participants for adversarial run
+  type: min_max             # "min_max" | "label_flip" | "sign_flip"
+
+baselines:
+  - vanilla_fedavg
+  - classical_krum
+
+hardware:
+  workstation: "AMD Ryzen 9 7900X, 64 GB RAM"
+  container: "Docker"
+  device: cpu
+
+software:
+  python: "3.11"
+  pennylane: "0.36"
+  flwr: "1.8"
+  simulaqron: "3.0"

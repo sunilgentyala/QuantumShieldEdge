@@ -1,0 +1,7 @@
+pennylane==0.36.0
+flwr==1.8.0
+torch>=2.1.0
+torchvision>=0.16.0
+numpy>=1.26.0
+scipy>=1.11.0
+pyyaml>=6.0.1

@@ -12,7 +12,9 @@
 [![GitHub Pages](https://img.shields.io/badge/Project%20Page-Live-6366f1?style=flat-square&logo=github)](https://sunilgentyala.github.io/QuantumShieldEdge/)
 
 **Sunil Gentyala** &nbsp;|&nbsp; HCLTech &nbsp;|&nbsp; IEEE Senior Member #101760715 &nbsp;|&nbsp; CISM &nbsp;|&nbsp; CCZT  
-**Suresh Kumar Darisi** &nbsp;|&nbsp; Rocket Software &nbsp;|&nbsp; IEEE Member #101925007
+**Suresh Kumar Darisi** &nbsp;|&nbsp; Rocket Software &nbsp;|&nbsp; IEEE Senior Member #101925007  
+**John Martin** &nbsp;|&nbsp; HCLTech (NZ) &nbsp;|&nbsp; CISSP &nbsp;|&nbsp; CISM &nbsp;|&nbsp; ISSAP &nbsp;|&nbsp; CITP &nbsp;|&nbsp; Open Group Master Architect  
+**Floriano Caprio** &nbsp;|&nbsp; HCLTech (HCL America Inc.)
 
 [Project Page](https://sunilgentyala.github.io/QuantumShieldEdge/) &nbsp;&bull;&nbsp; [Paper (CCNC 2027)](#citation) &nbsp;&bull;&nbsp; [Results](results/) &nbsp;&bull;&nbsp; [Evidence](evidence/)
 
@@ -202,7 +204,7 @@ This falls within the lower bound of current metropolitan QKD hardware (10–100
 @inproceedings{gentyala2027quantumshield,
   title     = {{QuantumShield-Edge}: A Hybrid {QKD}-Integrated Federated Learning
                Framework for Secure Consumer {IoT} Intelligence at the Network Edge},
-  author    = {Gentyala, Sunil and Darisi, Suresh Kumar},
+  author    = {Gentyala, Sunil and Darisi, Suresh Kumar and Martin, John and Caprio, Floriano},
   booktitle = {Proceedings of the IEEE Consumer Communications \& Networking Conference
                (CCNC)},
   year      = {2027},

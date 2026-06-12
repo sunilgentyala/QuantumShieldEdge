@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuantumShield-Edge | IEEE CCNC 2027</title>
+  <meta name="description" content="A Hybrid QKD-Integrated Federated Learning Framework for Secure Consumer IoT Intelligence at the Network Edge. IEEE CCNC 2027." />
+  <meta property="og:title" content="QuantumShield-Edge | IEEE CCNC 2027" />
+  <meta property="og:description" content="Hybrid QKD + FL framework: 94.7% Byzantine detection, 85.2% accuracy under 20% adversarial clients, feasible on metropolitan QKD infrastructure." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sunilgentyala.github.io/QuantumShieldEdge/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── Nav ─────────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <span>Quantum</span>Shield-Edge
+    </div>
+    <div class="nav-links">
+      <a href="#abstract">Abstract</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#results">Results</a>
+      <a href="#code">Code</a>
+      <a href="#citation">Citation</a>
+      <a href="https://github.com/sunilgentyala/QuantumShieldEdge" target="_blank">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ────────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="container">
+    <div class="venue-badge">IEEE CCNC 2027 &nbsp;|&nbsp; Quantum Security</div>
+
+    <h1 class="hero-title">
+      <em>QuantumShield-Edge:</em> A Hybrid QKD-Integrated<br>
+      Federated Learning Framework for Secure<br>
+      Consumer IoT Intelligence at the Network Edge
+    </h1>
+
+    <p class="hero-subtitle">
+      Information-theoretic gradient channel security meets variational quantum
+      anomaly detection &mdash; both feasible on today's metropolitan QKD infrastructure.
+    </p>
+
+    <div class="hero-actions">
+      <a href="https://github.com/sunilgentyala/QuantumShieldEdge" target="_blank" class="btn btn-primary">
+        View on GitHub
+      </a>
+      <a href="#results" class="btn btn-outline">Key Results</a>
+      <a href="#citation" class="btn btn-outline">Cite Paper</a>
+    </div>
+
+    <div class="authors">
+      <div class="author">
+        <strong>Sunil Gentyala</strong>
+        <span>HCLTech &bull; IEEE Senior Member #101760715<br>CISM, ISACA &bull; CCZT, CSA &bull; IET &bull; BCS</span>
+      </div>
+      <div class="author">
+        <strong>Suresh Kumar Darisi</strong>
+        <span>Rocket Software &bull; IEEE Member #101925007</span>
+      </div>
+    </div>
+
+    <!-- Metrics strip -->
+    <div class="metrics-strip">
+      <div class="metric-card">
+        <span class="metric-value" data-count="94.7" data-suffix="%">0%</span>
+        <span class="metric-label">VQAD Detection Rate (TPR)</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-value" data-count="85.2" data-suffix="%">0%</span>
+        <span class="metric-label">Accuracy under 20% Byzantine</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-value" data-count="22.3" data-suffix=" kbps">0 kbps</span>
+        <span class="metric-label">Mean Key Consumption</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-value" data-count="4.2" data-suffix=" ms">0 ms</span>
+        <span class="metric-label">OTP Encryption Latency / Round</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-value" data-count="50">0</span>
+        <span class="metric-label">IoT Node Testbed</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Abstract ─────────────────────────────────────────────────── -->
+<section id="abstract">
+  <div class="container">
+    <div class="section-label">Abstract</div>
+    <h2>What We Built and Why It Matters</h2>
+    <div class="abstract-box">
+      The proliferation of IoT devices across smart homes, wearable healthcare systems,
+      and connected vehicles has created an unprecedented demand for secure,
+      privacy-preserving intelligence at the network edge. The classical cryptographic
+      protocols that protect today's federated learning (FL) aggregation channels offer
+      only <strong>computational security guarantees</strong>, which will not hold against
+      a future quantum-capable adversary.
+      <br><br>
+      This paper presents <strong>QuantumShield-Edge</strong>, a hybrid quantum-classical
+      architecture that embeds <strong>quantum key distribution (QKD)</strong> into the FL
+      gradient aggregation pipeline for consumer IoT networks. The framework introduces a
+      three-tier edge architecture in which QKD-generated one-time pad keys protect gradient
+      transmissions, while a <strong>four-qubit variational quantum circuit (VQC)</strong>
+      performs fingerprint-based anomaly detection on incoming model updates to flag Byzantine
+      participants without ever exposing raw gradient data.
+      <br><br>
+      Simulation results on a <strong>50-node heterogeneous IoT testbed</strong> demonstrate
+      that QuantumShield-Edge achieves model accuracy within <strong>1.3 pp</strong> of
+      vanilla FedAvg while reducing gradient-poisoning attack success by
+      <strong>94.7%</strong> relative to state-of-the-art classical defenses. The framework
+      tolerates quantum bit error rates of up to <strong>11%</strong>, confirming its
+      viability on emerging metropolitan QKD infrastructure.
+    </div>
+  </div>
+</section>
+
+<!-- ── Architecture ─────────────────────────────────────────────── -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-label">System Design</div>
+    <h2>Three-Tier Architecture</h2>
+    <p>
+      QKD transceivers co-located at each Edge Aggregation Node (EAN) and the cloud aggregator
+      are connected via dark fiber or free-space optical links within a metropolitan QKD backbone.
+      Post-quantum key encapsulation secures leaf-to-EAN traffic, seeded with QKD-derived material.
+    </p>
+
+    <!-- Tier diagram -->
+    <div class="arch-diagram">
+      <div class="arch-svg-wrap">
+
+        <!-- Tier 3: Cloud -->
+        <div class="tier-label">Tier 3 &mdash; Cloud Aggregator</div>
+        <div class="arch-layer" style="grid-template-columns:1fr;">
+          <div class="arch-card" style="border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.08);">
+            <h4 style="color:var(--accent);">Global Aggregator &mdash; QSAL + VQAD</h4>
+            <p>Receives encrypted cluster gradients, runs VQAD Byzantine scoring, performs soft-weighted FedAvg, re-encrypts and broadcasts updated global model downstream.</p>
+          </div>
+        </div>
+
+        <div class="arch-connector">&#8595; QKD-OTP channels (metropolitan fiber / free-space optical) &#8595;</div>
+
+        <!-- Tier 2: EANs -->
+        <div class="tier-label">Tier 2 &mdash; Edge Aggregation Nodes (EANs)</div>
+        <div class="ean-grid mb-1">
+          <div class="arch-card" style="border-color:rgba(34,211,238,.3);">
+            <h4 style="color:var(--accent2);">EAN-1</h4>
+            <p>13 nodes &bull; QKL buffer &bull; Top-K sparsification &bull; OTP encryption</p>
+          </div>
+          <div class="arch-card" style="border-color:rgba(34,211,238,.3);">
+            <h4 style="color:var(--accent2);">EAN-2</h4>
+            <p>12 nodes &bull; QKL buffer &bull; Top-K sparsification &bull; OTP encryption</p>
+          </div>
+          <div class="arch-card" style="border-color:rgba(34,211,238,.3);">
+            <h4 style="color:var(--accent2);">EAN-3</h4>
+            <p>13 nodes &bull; QKL buffer &bull; Top-K sparsification &bull; OTP encryption</p>
+          </div>
+          <div class="arch-card" style="border-color:rgba(34,211,238,.3);">
+            <h4 style="color:var(--accent2);">EAN-4</h4>
+            <p>12 nodes &bull; QKL buffer &bull; Top-K sparsification &bull; OTP encryption</p>
+          </div>
+        </div>
+
+        <div class="arch-connector">&#8595; Post-quantum key encapsulation (leaf-to-EAN) &#8595;</div>
+
+        <!-- Tier 1: IoT -->
+        <div class="tier-label">Tier 1 &mdash; IoT Leaf Devices (50 nodes)</div>
+        <div class="leaf-grid">
+          <div class="leaf-dot">sensor</div>
+          <div class="leaf-dot">sensor</div>
+          <div class="leaf-dot">wearable</div>
+          <div class="leaf-dot">wearable</div>
+          <div class="leaf-dot">vehicle</div>
+          <div class="leaf-dot">sensor</div>
+          <div class="leaf-dot">home</div>
+          <div class="leaf-dot">home</div>
+          <div class="leaf-dot">vehicle</div>
+          <div class="leaf-dot">sensor</div>
+          <div class="leaf-dot">wearable</div>
+          <div class="leaf-dot">sensor</div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);margin-top:.75rem;text-align:center;">
+          Local training on private data &mdash; Dirichlet(&alpha;=0.5) non-IID CIFAR-10 partitions
+        </p>
+      </div>
+    </div>
+
+    <!-- Three layers explainer -->
+    <div class="layers mt-2">
+
+      <div class="layer-card">
+        <div class="layer-icon qkl">QKL</div>
+        <div class="layer-body">
+          <h3>QKD Key Management Layer &mdash; Section IV-B</h3>
+          <p>
+            Runs decoy-state BB84 to bound photon-number-splitting attacks.
+            Each EAN pre-loads 3 rounds of keying material. Proactive re-keying fires
+            when buffer occupancy drops below 40%, fully decoupling QKD timing from
+            FL round timing. Wegman-Carter MACs authenticate the classical post-processing
+            channel without any computational hardness assumption.
+          </p>
+          <div class="pill-list">
+            <span class="pill">Decoy-state BB84</span>
+            <span class="pill">REQUEST_KEY(size)</span>
+            <span class="pill">KEY_LEVEL()</span>
+            <span class="pill">40% re-key threshold</span>
+            <span class="pill">Wegman-Carter MAC</span>
+            <span class="pill">QBER abort at 11%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-card">
+        <div class="layer-icon qsal">QSAL</div>
+        <div class="layer-body">
+          <h3>Quantum-Secured Aggregation Layer &mdash; Section IV-C</h3>
+          <p>
+            Top-K gradient sparsification at 5% density cuts key demand 20-fold,
+            satisfying Equation (1) within current metropolitan QKD throughput.
+            OTP encryption <code>c = g &oplus; k</code> delivers unconditional secrecy:
+            no computational hardness assumption at any layer.
+            Key material is consumed atomically and never reused.
+          </p>
+          <div class="pill-list">
+            <span class="pill">Top-K (K/M = 5%)</span>
+            <span class="pill">One-time pad XOR</span>
+            <span class="pill">Unconditional secrecy</span>
+            <span class="pill">Non-overlapping key consumption</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-card">
+        <div class="layer-icon vqad">VQAD</div>
+        <div class="layer-body">
+          <h3>Variational Quantum Anomaly Detector &mdash; Section IV-D</h3>
+          <p>
+            Four gradient statistics are angle-encoded into a 4-qubit register via Ry rotations.
+            Three alternating layers of parameterized Ry/Rz single-qubit rotations interleaved
+            with CNOT brick-wall entanglement (48 trainable parameters total).
+            Updates with <code>&lang;Z&rang; &lt; 0</code> are flagged Byzantine and
+            down-weighted by 0.1 in the FedAvg aggregation step.
+            Trained offline via the parameter-shift rule with Adam.
+          </p>
+          <div class="pill-list">
+            <span class="pill">4-qubit VQC</span>
+            <span class="pill">48 parameters</span>
+            <span class="pill">Ry angle encoding</span>
+            <span class="pill">Brick-wall CNOT</span>
+            <span class="pill">Parameter-shift + Adam</span>
+            <span class="pill">Privacy-preserving fingerprint</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VQC diagram -->
+    <div class="mt-2">
+      <div class="section-label">VQC Circuit</div>
+      <div class="vqc-diagram">
+        <div class="circuit">
+<span class="q-label">q0</span> ─ <span class="gate-ry">Ry(π·f₀)</span> ─ <span class="gate-ry">Ry(θ₀)</span> ─ <span class="gate-rz">Rz(φ₀)</span> ─●─ ─── ─ <span class="gate-ry">Ry(θ₄)</span> ─ <span class="gate-rz">Rz(φ₄)</span> ─●─ ─── ─ <span class="gate-ry">Ry(θ₈)</span> ─ <span class="gate-rz">Rz(φ₈)</span> ─ <span class="measure">─M─ ⟨Z⟩</span>
+<span class="q-label">q1</span> ─ <span class="gate-ry">Ry(π·f₁)</span> ─ <span class="gate-ry">Ry(θ₁)</span> ─ <span class="gate-rz">Rz(φ₁)</span> ─<span class="gate-cx">X</span>─ ─●─ ─ <span class="gate-ry">Ry(θ₅)</span> ─ <span class="gate-rz">Rz(φ₅)</span> ─<span class="gate-cx">X</span>─ ─●─ ─ <span class="gate-ry">Ry(θ₉)</span> ─ <span class="gate-rz">Rz(φ₉)</span> ─
+<span class="q-label">q2</span> ─ <span class="gate-ry">Ry(π·f₂)</span> ─ <span class="gate-ry">Ry(θ₂)</span> ─ <span class="gate-rz">Rz(φ₂)</span> ─── ─<span class="gate-cx">X</span>─ ─ <span class="gate-ry">Ry(θ₆)</span> ─ <span class="gate-rz">Rz(φ₆)</span> ─●─ ─<span class="gate-cx">X</span>─ ─ <span class="gate-ry">Ry(θ₁₀)</span>─ <span class="gate-rz">Rz(φ₁₀)</span>─
+<span class="q-label">q3</span> ─ <span class="gate-ry">Ry(π·f₃)</span> ─ <span class="gate-ry">Ry(θ₃)</span> ─ <span class="gate-rz">Rz(φ₃)</span> ─── ─── ─ <span class="gate-ry">Ry(θ₇)</span> ─ <span class="gate-rz">Rz(φ₇)</span> ─── ─<span class="gate-cx">X</span>─ ─ <span class="gate-ry">Ry(θ₁₁)</span>─ <span class="gate-rz">Rz(φ₁₁)</span>─
+
+  Fingerprint: <span class="gate-ry">f₀</span>=L₂‑norm  <span class="gate-ry">f₁</span>=cosine‑sim  <span class="gate-ry">f₂</span>=excess‑kurtosis  <span class="gate-ry">f₃</span>=pos‑ratio
+  Output:  ⟨Z⟩ ≥ 0  →  benign  (aggregation weight = 1.0)
+           ⟨Z⟩ &lt; 0  →  <span class="gate-cx">Byzantine flag</span>  (aggregation weight = 0.1)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Results ──────────────────────────────────────────────────── -->
+<section id="results" class="results-section">
+  <div class="container">
+    <div class="section-label">Evaluation</div>
+    <h2>Simulation Results</h2>
+    <p>
+      Implemented in Python 3.11 with PennyLane 0.36, Flower (flwr) 1.8, and SimulaQron 3.0.
+      50-node Docker testbed on AMD Ryzen 9 7900X (64 GB RAM), 4 EAN clusters, CIFAR-10
+      with Dirichlet(&alpha;=0.5) non-IID partitioning. All metrics averaged over 5 seeds
+      (std dev &le; 0.3 pp accuracy, &le; 0.8 pp detection rate).
+    </p>
+
+    <div class="results-grid">
+
+      <!-- Table I -->
+      <div class="result-block">
+        <h3>Table I &mdash; Model Accuracy (100 FL Rounds)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Configuration</th>
+                <th>No Attack</th>
+                <th>20% Byzantine</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vanilla FedAvg</td>
+                <td>89.9%</td>
+                <td class="val-bad">71.4%</td>
+              </tr>
+              <tr>
+                <td>Classical Krum</td>
+                <td>89.1%</td>
+                <td>81.7%</td>
+              </tr>
+              <tr class="highlight">
+                <td>QuantumShield-Edge (ours)</td>
+                <td class="val-accent">88.6%</td>
+                <td class="val-good">85.2%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:.78rem;margin-top:1rem;">
+          Only 1.3 pp below vanilla FedAvg with no adversaries; 3.5 pp ahead of Krum
+          under 20% Byzantine min-max poisoning.
+        </p>
+      </div>
+
+      <!-- VQAD detection -->
+      <div class="result-block">
+        <h3>VQAD Detection Performance</h3>
+        <div class="bar-row">
+          <span class="bar-label">TPR</span>
+          <div class="bar-track"><div class="bar-fill accent" data-pct="94.7"></div></div>
+          <span class="bar-pct">94.7%</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">FPR overall</span>
+          <div class="bar-track"><div class="bar-fill muted" data-pct="3.2"></div></div>
+          <span class="bar-pct">3.2%</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">FPR &gt; rnd 20</span>
+          <div class="bar-track"><div class="bar-fill green" data-pct="1.0"></div></div>
+          <span class="bar-pct">&lt;1%</span>
+        </div>
+        <div class="divider"></div>
+        <p style="font-size:.82rem;">
+          Generalises across min-max, label-flip, and sign-flip attacks without retraining.
+          False positives are concentrated in rounds 1–20 when benign gradient variance
+          overlaps with poisoned updates; after round 20 the FPR drops below 1%.
+        </p>
+      </div>
+
+      <!-- Key rate -->
+      <div class="result-block">
+        <h3>QKD Key Rate Feasibility &mdash; Section V-B</h3>
+        <div class="bar-row">
+          <span class="bar-label">Channel</span>
+          <div class="bar-track"><div class="bar-fill accent" data-pct="100"></div></div>
+          <span class="bar-pct">40 kbps</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">K<sub>min</sub></span>
+          <div class="bar-track"><div class="bar-fill green" data-pct="73.25"></div></div>
+          <span class="bar-pct">29.3 kbps</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Consumed</span>
+          <div class="bar-track"><div class="bar-fill muted" data-pct="55.75"></div></div>
+          <span class="bar-pct">22.3 kbps</span>
+        </div>
+        <div class="divider"></div>
+        <p style="font-size:.82rem;">
+          <code>K<sub>min</sub> = 1.1 &times; 400 Kbit &times; 4 / 60 s &asymp; 29.3 kbps</code><br>
+          Within current metropolitan QKD hardware range (10–100 kbps over 50–80 km fiber).
+          Buffer occupancy never dropped below 18% under nominal QBER conditions.
+        </p>
+      </div>
+
+      <!-- Latency -->
+      <div class="result-block">
+        <h3>Overhead &mdash; Section VI-E</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Component</th><th>Latency</th><th>vs Round Budget</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>OTP encrypt / decrypt (EAN)</td>
+                <td class="val-accent">4.2 ms</td>
+                <td class="val-good">&lt; 0.01%</td>
+              </tr>
+              <tr>
+                <td>VQAD inference (CPU)</td>
+                <td>38 ms</td>
+                <td class="val-good">0.06%</td>
+              </tr>
+              <tr>
+                <td>QKD key generation</td>
+                <td>async</td>
+                <td class="val-good">does not block FL</td>
+              </tr>
+              <tr class="highlight">
+                <td>Round budget (T<sub>r</sub>)</td>
+                <td>60 s</td>
+                <td>&mdash;</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Code ─────────────────────────────────────────────────────── -->
+<section id="code">
+  <div class="container">
+    <div class="section-label">Artifacts</div>
+    <h2>Code &amp; Experimental Artifacts</h2>
+    <p>
+      All source code, experiment configuration files, pre-trained VQAD weights, and
+      raw result logs are publicly available in the GitHub repository.
+      The manuscript is not included (IEEE copyright).
+    </p>
+
+    <div class="files-grid">
+      <div class="file-card">
+        <h4>src/qkl/</h4>
+        <p>Decoy-state BB84 emulator with QBER abort. Thread-safe key buffer with proactive re-keying at 40% occupancy.</p>
+      </div>
+      <div class="file-card">
+        <h4>src/qsal/</h4>
+        <p>OTP encryptor (Equation 2). Top-K sparsifier at 5% density, cutting key demand 20-fold.</p>
+      </div>
+      <div class="file-card">
+        <h4>src/vqad/</h4>
+        <p>4-qubit PennyLane VQC. 4-dim gradient fingerprint extractor. Parameter-shift + Adam offline trainer.</p>
+      </div>
+      <div class="file-card">
+        <h4>src/fl/</h4>
+        <p>LightweightCNN (~180K params). Flower client with QKL. Flower server with VQAD soft-weighted FedAvg.</p>
+      </div>
+      <div class="file-card">
+        <h4>src/utils/attacks.py</h4>
+        <p>Byzantine attack implementations: min-max gradient poisoning, label-flip, sign-flip.</p>
+      </div>
+      <div class="file-card">
+        <h4>experiments/</h4>
+        <p>Simulation runner reproducing Table I. Offline VQAD training script. Full YAML configuration.</p>
+      </div>
+      <div class="file-card">
+        <h4>results/</h4>
+        <p>Table I accuracy CSV. VQAD detection rate CSV. Key consumption and latency stats CSV.</p>
+      </div>
+      <div class="file-card">
+        <h4>models/vqad_weights.npy</h4>
+        <p>Pre-trained VQAD circuit parameters (48 values). Load with <code>detector.load_weights()</code>.</p>
+      </div>
+    </div>
+
+    <div class="mt-2">
+      <div class="section-label">Quick Start</div>
+      <div class="citation-block" style="margin-bottom:1rem;">
+        <button class="copy-btn">Copy</button>
+        <pre>git clone https://github.com/sunilgentyala/QuantumShieldEdge.git
+cd QuantumShieldEdge
+pip install -r requirements.txt
+
+# Train VQAD offline
+python experiments/train_vqad.py --epochs 100 --seed 42
+
+# Run full simulation
+python experiments/run_simulation.py --config experiments/config/default.yaml</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Citation ─────────────────────────────────────────────────── -->
+<section id="citation">
+  <div class="container">
+    <div class="section-label">Citation</div>
+    <h2>Cite This Work</h2>
+    <p>If you use this code or build on this framework in your research, please cite:</p>
+
+    <div class="citation-block">
+      <button class="copy-btn">Copy</button>
+      <pre>@inproceedings{gentyala2027quantumshield,
+  title     = {{QuantumShield-Edge}: A Hybrid {QKD}-Integrated Federated
+               Learning Framework for Secure Consumer {IoT} Intelligence
+               at the Network Edge},
+  author    = {Gentyala, Sunil and Darisi, Suresh Kumar},
+  booktitle = {Proceedings of the IEEE Consumer Communications \&
+               Networking Conference (CCNC)},
+  year      = {2027},
+  publisher = {IEEE}
+}</pre>
+    </div>
+
+    <div class="mt-2">
+      <p style="font-size:.88rem;">
+        Sunil Gentyala &bull;
+        <a href="mailto:sunil.gentyala@ieee.org">sunil.gentyala@ieee.org</a> &bull;
+        IEEE Senior Member #101760715 &bull;
+        <a href="https://www.linkedin.com/in/sunilgentyala/" target="_blank">LinkedIn</a> &bull;
+        <a href="https://github.com/sunilgentyala" target="_blank">GitHub</a> &bull;
+        ORCID: 0009-0005-2642-3479
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ───────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <p>
+      QuantumShield-Edge &bull; IEEE CCNC 2027 &bull;
+      <a href="https://github.com/sunilgentyala/QuantumShieldEdge" target="_blank">GitHub</a> &bull;
+      <a href="https://github.com/sunilgentyala/QuantumShieldEdge/blob/master/LICENSE" target="_blank">MIT License</a>
+    </p>
+    <p style="margin-top:.5rem;font-size:.78rem;">
+      The manuscript is under IEEE copyright and is not distributed here.
+      All experimental artifacts are released under MIT License.
+    </p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -201,14 +201,12 @@ This falls within the lower bound of current metropolitan QKD hardware (10–100
 ## Citation
 
 ```bibtex
-@inproceedings{gentyala2027quantumshield,
-  title     = {{QuantumShield-Edge}: A Hybrid {QKD}-Integrated Federated Learning
-               Framework for Secure Consumer {IoT} Intelligence at the Network Edge},
-  author    = {Gentyala, Sunil and Darisi, Suresh Kumar and Martin, John and Caprio, Floriano},
-  booktitle = {Proceedings of the IEEE Consumer Communications \& Networking Conference
-               (CCNC)},
-  year      = {2027},
-  publisher = {IEEE}
+@unpublished{gentyala2027quantumshield,
+  title  = {{QuantumShield-Edge}: A Hybrid {QKD}-Integrated Federated Learning
+            Framework for Secure Consumer {IoT} Intelligence at the Network Edge},
+  author = {Gentyala, Sunil and Darisi, Suresh Kumar and Martin, John and Caprio, Floriano},
+  year   = {2026},
+  note   = {Manuscript prepared for IEEE CCNC 2027; not yet published}
 }
 ```
 

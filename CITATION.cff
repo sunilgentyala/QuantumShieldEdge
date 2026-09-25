@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: If you use this software in your research, please cite it as below.
+type: software
+title: QuantumShieldEdge
+authors:
+- family-names: Gentyala
+  given-names: Sunil
+  affiliation: HCLTech (HCL America Inc.), Dallas, TX, USA
+  orcid: https://orcid.org/0009-0005-2642-3479
+  email: sunil.gentyala@ieee.org
+- family-names: Darisi
+  given-names: Suresh Kumar
+- family-names: Martin
+  given-names: John
+- family-names: Caprio
+  given-names: Floriano
+repository-code: https://github.com/sunilgentyala/QuantumShieldEdge
+url: https://sunilgentyala.github.io/QuantumShieldEdge/
+license: MIT
+abstract: Hybrid QKD-Integrated Federated Learning for Secure Consumer IoT at the Network
+  Edge (IEEE CCNC 2027)
+keywords:
+- edge-computing
+- federated-learning
+- iot-security
+- network-security
+- post-quantum-cryptography
+- python
+- quantum-key-distribution

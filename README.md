@@ -15,7 +15,7 @@
 
 [Project Page](https://sunilgentyala.github.io/QuantumShieldEdge/) &nbsp;&bull;&nbsp; [Results](results/) &nbsp;&bull;&nbsp; [Reproduce](#reproduce) &nbsp;&bull;&nbsp; [Limitations](#limitations)
 
-<img src="results/figures/graphical_abstract.png" alt="QuantumShield-Edge overview" width="860">
+<img src="results/figures/fig1_architecture.png" alt="QuantumShield-Edge overview" width="860">
 
 </div>
 

@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: If you use this software in your research, please cite it as below.
+type: software
+title: QuantumShield-Edge simulator
+authors:
+- family-names: Gentyala
+  given-names: Sunil
+  affiliation: HCLTech (HCL America Inc.), Dallas, TX, USA
+  orcid: https://orcid.org/0009-0005-2642-3479
+  email: sunil.gentyala@ieee.org
+- family-names: Padala
+  given-names: S. M. Krishna Reddy
+  affiliation: Aditya University, Surampalem, Andhra Pradesh, India
+- family-names: Darisi
+  given-names: Suresh Kumar
+- family-names: Martin
+  given-names: John
+- family-names: Caprio
+  given-names: Floriano
+repository-code: https://github.com/sunilgentyala/QuantumShieldEdge
+license: MIT
+abstract: Research simulator for QKD-keyed hierarchical federated learning with Byzantine-aware
+  aggregation at the edge tier. The QKD layer is emulated.
+keywords:
+- federated-learning
+- quantum-key-distribution
+- byzantine-robustness
+- edge-computing
+- one-time-pad

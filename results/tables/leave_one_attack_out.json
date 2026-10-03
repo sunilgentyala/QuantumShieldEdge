@@ -1,0 +1,62 @@
+{
+ "VQAD|alie": {
+  "tpr": 1.0,
+  "fpr": 0.155
+ },
+ "MLP|alie": {
+  "tpr": 0.0,
+  "fpr": 0.30875
+ },
+ "Linear|alie": {
+  "tpr": 0.0,
+  "fpr": 0.2275
+ },
+ "VQAD|label_flip": {
+  "tpr": 0.005,
+  "fpr": 0.0025
+ },
+ "MLP|label_flip": {
+  "tpr": 0.01,
+  "fpr": 0.0
+ },
+ "Linear|label_flip": {
+  "tpr": 0.385,
+  "fpr": 0.4
+ },
+ "VQAD|min_max": {
+  "tpr": 0.99,
+  "fpr": 0.0675
+ },
+ "MLP|min_max": {
+  "tpr": 0.85,
+  "fpr": 0.06625
+ },
+ "Linear|min_max": {
+  "tpr": 0.045,
+  "fpr": 0.20375
+ },
+ "VQAD|scale": {
+  "tpr": 0.92,
+  "fpr": 0.08
+ },
+ "MLP|scale": {
+  "tpr": 0.245,
+  "fpr": 0.05375
+ },
+ "Linear|scale": {
+  "tpr": 0.0,
+  "fpr": 0.375
+ },
+ "VQAD|sign_flip": {
+  "tpr": 0.795,
+  "fpr": 0.0125
+ },
+ "MLP|sign_flip": {
+  "tpr": 0.675,
+  "fpr": 0.0625
+ },
+ "Linear|sign_flip": {
+  "tpr": 0.22,
+  "fpr": 0.43
+ }
+}

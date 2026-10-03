@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QuantumShield-Edge</title>
+<meta name="description" content="Research simulator for QKD-keyed hierarchical federated learning with Byzantine-aware aggregation at the edge tier. The QKD layer is emulated." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<style>
+  :root { --bg:#ffffff; --fg:#1c2330; --muted:#5b6575; --accent:#00467f; --card:#f3f6fa; --border:#d8dee8; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0f141b; --fg:#e6ebf2; --muted:#9aa6b8; --accent:#7db4ff; --card:#18202b; --border:#2a3545; }
+  }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:48px 20px 72px; }
+  h1 { font-size:2rem; margin:0 0 6px; color:var(--accent); }
+  h2 { font-size:1.15rem; margin:32px 0 8px; }
+  p, li { color:var(--fg); }
+  .sub { color:var(--muted); margin:0 0 24px; }
+  .note { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin:20px 0; }
+  table { width:100%; border-collapse:collapse; font-size:0.93rem; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
+  th { color:var(--muted); font-weight:600; }
+  code { background:var(--card); padding:1px 5px; border-radius:4px; font-size:0.9em; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>QuantumShield-Edge</h1>
+  <p class="sub">A research simulator for QKD-keyed hierarchical federated learning with Byzantine-aware aggregation at the edge tier.</p>
+
+  <div class="note">
+    <strong>Scope.</strong> The QKD layer is emulated: key bytes come from a seeded pseudo-random generator standing in for QKD output,
+    so the simulator exercises the code paths and key arithmetic but is not by itself a cryptographic result. Leaf-to-edge links are
+    assumed post-quantum protected and are not simulated. No claim of quantum advantage is made.
+  </div>
+
+  <h2>What is executed</h2>
+  <table>
+    <tr><th>Component</th><th>Implementation</th></tr>
+    <tr><td>Sealed transport</td><td>One-time pad plus Wegman-Carter tag; the cloud aggregates only what it decrypted and verified</td></tr>
+    <tr><td>QKD link model</td><td>Asymptotic and finite-key secret fraction, key pools, protocol-level BB84 Monte Carlo</td></tr>
+    <tr><td>Shortage policies</td><td><code>adapt</code>, <code>wait</code>, <code>defer</code>, <code>pq</code></td></tr>
+    <tr><td>Attacks</td><td>Sign flip, boosting, label flip, ALIE, min-max</td></tr>
+    <tr><td>Aggregators</td><td>FedAvg, Krum, median, trimmed mean, detector-weighted</td></tr>
+    <tr><td>Detectors</td><td>4-qubit circuit against size-matched classical models on identical inputs</td></tr>
+  </table>
+
+  <h2>Reproduce</h2>
+  <p>Every table and figure in the repository is generated from the per-run result files by the scripts in <code>experiments/</code>.
+  See the <a href="https://github.com/sunilgentyala/QuantumShieldEdge">README</a> for commands, tests and limitations.</p>
+
+  <p class="sub" style="margin-top:36px">MIT licensed. Sunil Gentyala and co-authors.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,80 @@
+{
+ "0.01": {
+  "final_acc": 0.26015,
+  "it_frac": 1.0,
+  "defer_frac": 0.0,
+  "pq_frac": 0.0,
+  "adapt_frac": 0.0,
+  "key_bits": 15456.0,
+  "delay": 0.0,
+  "dens": 0.009976285877831385,
+  "macs": 240.0,
+  "auth_fail": 0.0,
+  "min_level": 0.1790135
+ },
+ "0.02": {
+  "final_acc": 0.27715,
+  "it_frac": 1.0,
+  "defer_frac": 0.0,
+  "pq_frac": 0.0,
+  "adapt_frac": 0.0,
+  "key_bits": 30640.0,
+  "delay": 0.0,
+  "dens": 0.019993458173194863,
+  "macs": 240.0,
+  "auth_fail": 0.0,
+  "min_level": 0.1786339
+ },
+ "0.05": {
+  "final_acc": 0.30335,
+  "it_frac": 1.0,
+  "defer_frac": 0.0,
+  "pq_frac": 0.0,
+  "adapt_frac": 0.0,
+  "key_bits": 76096.0,
+  "delay": 0.0,
+  "dens": 0.04996320222422111,
+  "macs": 240.0,
+  "auth_fail": 0.0,
+  "min_level": 0.1774975
+ },
+ "0.1": {
+  "final_acc": 0.3194,
+  "it_frac": 1.0,
+  "defer_frac": 0.0,
+  "pq_frac": 0.0,
+  "adapt_frac": 0.0,
+  "key_bits": 151920.0,
+  "delay": 0.0,
+  "dens": 0.09996729086597432,
+  "macs": 240.0,
+  "auth_fail": 0.0,
+  "min_level": 0.17560189999999998
+ },
+ "0.25": {
+  "final_acc": 0.32945,
+  "it_frac": 1.0,
+  "defer_frac": 0.0,
+  "pq_frac": 0.0,
+  "adapt_frac": 0.0,
+  "key_bits": 379392.0,
+  "delay": 0.0,
+  "dens": 0.24997955679123401,
+  "macs": 240.0,
+  "auth_fail": 0.0,
+  "min_level": 0.16991509999999999
+ },
+ "1.0": {
+  "final_acc": 0.3338,
+  "it_frac": 1.0,
+  "defer_frac": 0.0,
+  "pq_frac": 0.0,
+  "adapt_frac": 0.0,
+  "key_bits": 1516720.0,
+  "delay": 0.0,
+  "dens": 1.0,
+  "macs": 240.0,
+  "auth_fail": 0.0,
+  "min_level": 0.1414819
+ }
+}

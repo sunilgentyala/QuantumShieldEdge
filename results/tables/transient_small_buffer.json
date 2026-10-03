@@ -1,0 +1,27 @@
+{
+ "adapt": {
+  "final_acc": 0.35835,
+  "min_level": 8e-05,
+  "otp_frac_event": 0.23809523809523808
+ },
+ "defer": {
+  "final_acc": 0.35919999999999996,
+  "min_level": 0.0488,
+  "otp_frac_event": 0.19047619047619047
+ },
+ "nominal": {
+  "final_acc": 0.369,
+  "min_level": 0.80976,
+  "otp_frac_event": 1.0
+ },
+ "pq": {
+  "final_acc": 0.369,
+  "min_level": 0.0488,
+  "otp_frac_event": 0.19047619047619047
+ },
+ "wait": {
+  "final_acc": 0.35919999999999996,
+  "min_level": 0.0488,
+  "otp_frac_event": 0.19047619047619047
+ }
+}

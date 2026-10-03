@@ -1,0 +1,20 @@
+{
+  "VQAD": {
+    "params": 24,
+    "train_loss": 0.4220157120692278,
+    "train_tpr": 0.78,
+    "train_fpr": 0.045
+  },
+  "MLP": {
+    "params": 25,
+    "train_loss": 0.33678940402080765,
+    "train_tpr": 0.814,
+    "train_fpr": 0.0525
+  },
+  "Linear": {
+    "params": 5,
+    "train_loss": 0.8711119355130246,
+    "train_tpr": 0.676,
+    "train_fpr": 0.3825
+  }
+}

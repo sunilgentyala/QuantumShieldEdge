@@ -1,13 +1,65 @@
+<div align="center">
+
 # QuantumShield-Edge
+
+### QKD-keyed hierarchical federated learning with Byzantine-aware aggregation at the edge tier
+
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![Tests](https://img.shields.io/badge/tests-22%20passing-22c55e?style=flat-square)](tests/)
+[![Results](https://img.shields.io/badge/results-reproducible%20from%20raw%20JSON-0a66c2?style=flat-square)](results/)
+[![QKD](https://img.shields.io/badge/QKD%20layer-emulated-f59e0b?style=flat-square)](#scope-stated-plainly)
+[![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](LICENSE)
+[![Project Page](https://img.shields.io/badge/Project%20Page-Live-6366f1?style=flat-square&logo=github)](https://sunilgentyala.github.io/QuantumShieldEdge/)
+
+**Sunil Gentyala** and co-authors
+
+[Project Page](https://sunilgentyala.github.io/QuantumShieldEdge/) &nbsp;&bull;&nbsp; [Results](results/) &nbsp;&bull;&nbsp; [Reproduce](#reproduce) &nbsp;&bull;&nbsp; [Limitations](#limitations)
+
+<img src="results/figures/graphical_abstract.png" alt="QuantumShield-Edge overview" width="860">
+
+</div>
+
+---
 
 A research simulator for **QKD-keyed hierarchical federated learning** with Byzantine-aware aggregation at the edge tier.
 Leaf devices train a shared model; edge aggregation nodes (EANs) aggregate their cluster and send a sealed, sparsified update
 to a cloud aggregator over a link keyed from quantum key distribution (QKD); the cloud returns a sealed model delta.
 
-> **Scope, stated plainly.** The QKD layer is **emulated**: key bytes come from a seeded pseudo-random generator that stands in for
+> <a id="scope-stated-plainly"></a>**Scope, stated plainly.** The QKD layer is **emulated**: key bytes come from a seeded pseudo-random generator that stands in for
 > QKD output, so the simulator exercises the code paths and the key arithmetic but is not by itself a cryptographic result.
 > Leaf-to-EAN links are assumed to be protected by post-quantum cryptography and are **not simulated**. Experiments use CIFAR-10
 > with a 24,458-parameter CNN on CPU. No claim of quantum advantage is made.
+
+## Key results
+
+Every number below is produced by the code in this repository and regenerated from `results/raw/` by `experiments/analyze.py`.
+CIFAR-10, 50 leaves in 4 clusters, 40 rounds, 24,458-parameter CNN, 3 seeds, mean +- std of final accuracy (%).
+
+| Aggregator | No attack | Sign flip | Min-max |
+|:---|:---:|:---:|:---:|
+| FedAvg | 33.1 +- 2.0 | 25.3 +- 3.1 | 21.7 +- 2.6 |
+| Krum | 27.4 +- 2.6 | 25.8 +- 6.2 | 24.9 +- 3.0 |
+| Trimmed mean | 31.1 +- 1.8 | 23.5 +- 4.6 | 19.7 +- 4.5 |
+| MLP detector | 33.4 +- 1.4 | 31.3 +- 1.9 | 27.5 +- 6.3 |
+| VQAD (4-qubit circuit) | 33.1 +- 3.9 | 31.0 +- 0.8 | 26.9 +- 4.7 |
+
+- **Detector weighting helps under attack.** Both detectors recover several points of accuracy under sign flip and min-max
+  compared with FedAvg and the robust statistics. Absolute accuracy is low because the model is tiny and training is short.
+- **No in-distribution quantum advantage.** The 24-parameter circuit and a size-matched MLP perform alike on attacks seen in training.
+- **Out-of-distribution, the circuit does better, but not purely because it is quantum.** In leave-one-attack-out tests over
+  8 training seeds, balanced accuracy is 0.84 (circuit) vs 0.61 (MLP) and 0.40 (linear); classical controls with a trigonometric
+  input encoding reach 0.71 to 0.75, so the encoding explains part of the gap and the circuit still leads.
+- **The QKD cost is exact and measurable.** A link needs 76,096 key bits per round at 5% sparsity. When key supply falls to
+  0.14x of demand, `adapt` keeps 92% of messages one-time-pad protected, `wait` keeps 100% at the price of delay, `defer`
+  collapses to chance accuracy, and `pq` keeps accuracy but exposes most traffic to post-quantum-only protection.
+- **Label flipping is not detected** by any model here (detection at chance).
+
+<p align="center">
+  <img src="results/figures/fig3_detection_rates.png" width="46%" alt="Detection rates">
+  <img src="results/figures/fig5_keyrate_policies.png" width="46%" alt="Key-rate policies">
+</p>
+
+---
 
 ## What is real in this code
 

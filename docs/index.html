@@ -48,6 +48,25 @@
     <tr><td>Detectors</td><td>4-qubit circuit against size-matched classical models on identical inputs</td></tr>
   </table>
 
+
+  <h2>Results at a glance</h2>
+  <p>Final accuracy (%) on CIFAR-10, 50 leaves, 40 rounds, 3 seeds. Generated from the raw per-run files.</p>
+  <table>
+    <tr><th>Aggregator</th><th>No attack</th><th>Sign flip</th><th>Min-max</th></tr>
+    <tr><td>FedAvg</td><td>33.1 &plusmn; 2.0</td><td>25.3 &plusmn; 3.1</td><td>21.7 &plusmn; 2.6</td></tr>
+    <tr><td>Krum</td><td>27.4 &plusmn; 2.6</td><td>25.8 &plusmn; 6.2</td><td>24.9 &plusmn; 3.0</td></tr>
+    <tr><td>MLP detector</td><td>33.4 &plusmn; 1.4</td><td>31.3 &plusmn; 1.9</td><td>27.5 &plusmn; 6.3</td></tr>
+    <tr><td>VQAD (4-qubit circuit)</td><td>33.1 &plusmn; 3.9</td><td>31.0 &plusmn; 0.8</td><td>26.9 &plusmn; 4.7</td></tr>
+  </table>
+  <ul>
+    <li>No in-distribution quantum advantage: the circuit and a size-matched MLP perform alike.</li>
+    <li>Leave-one-attack-out balanced accuracy over 8 seeds: circuit 0.84, MLP 0.61, linear 0.40; classical controls with trigonometric encoding reach 0.71 to 0.75.</li>
+    <li>A link needs 76,096 key bits per round at 5% sparsity; the shortage policy decides whether you lose accuracy, delay, or one-time-pad coverage.</li>
+  </ul>
+  <img src="img/fig3_detection_rates.png" alt="Detection rates" style="max-width:100%;border:1px solid var(--border);border-radius:8px;margin:8px 0" />
+  <img src="img/fig5_keyrate_policies.png" alt="Key-rate policies" style="max-width:100%;border:1px solid var(--border);border-radius:8px;margin:8px 0" />
+  <img src="img/fig1_architecture.png" alt="Architecture" style="max-width:100%;border:1px solid var(--border);border-radius:8px;margin:8px 0" />
+
   <h2>Reproduce</h2>
   <p>Every table and figure in the repository is generated from the per-run result files by the scripts in <code>experiments/</code>.
   See the <a href="https://github.com/sunilgentyala/QuantumShieldEdge">README</a> for commands, tests and limitations.</p>

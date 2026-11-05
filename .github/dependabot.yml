@@ -4,7 +4,15 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    # requirements.txt keeps loose lower bounds on purpose; only the pinned lock file is bumped
+    versioning-strategy: increase-if-necessary
+    groups:
+      python-dependencies:
+        patterns: ["*"]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]

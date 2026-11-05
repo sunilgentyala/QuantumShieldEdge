@@ -10,16 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ["3.11", "3.12"]
+        python: ["3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
           cache: pip
-      - run: pip install -r requirements.txt
+      - run: pip install -r requirements-lock.txt
       - name: Tests (synthetic CIFAR-shaped data, no download)
         env:
           QSE_SYNTHETIC_DATA: "1"
@@ -27,14 +27,14 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - run: pip install bandit pip-audit
       - name: Static analysis
         run: bandit -q -r qse -ll
       - name: Dependency audit
-        run: pip-audit -r requirements.txt
+        run: pip-audit -r requirements-lock.txt

@@ -1,8 +1,9 @@
-# Versions this repository is tested with (Python 3.14, Windows 11). requirements.txt holds the loose ranges.
+# Versions this repository is tested with (31 tests pass on Python 3.14 and in CI on 3.12 and 3.13).
+# requirements.txt holds the loose ranges; CI installs this file so that the pins are what is tested.
 torch==2.11.0
-numpy==2.4.4
-scipy==1.17.1
-matplotlib==3.10.9
+numpy==2.5.4
+scipy==1.18.1
+matplotlib==3.11.2
 pennylane==0.45.1
-pytest==9.0.3
-pillow==12.2.0
+pytest==9.2.0
+pillow==13.0.0

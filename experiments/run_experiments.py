@@ -147,7 +147,29 @@ def suite_sens():
     return jobs
 
 
-SUITES = dict(sens=suite_sens, main=suite_main, keyrate=suite_keyrate, qber=suite_qber, finitekey=suite_finitekey,
+def suite_alielocal():
+    """ALIE crafted from cluster-local statistics (n and m of the attacked EAN) instead of the pooled ones."""
+    jobs = []
+    for seed in range(3):
+        for agg in ("fedavg", "median", "vqad"):
+            jobs.append((f"alielocal_{agg}_s{seed}",
+                         base(seed=seed, attack="alie_local", aggregator=agg, pipeline="qkd", rounds=40)))
+    return jobs
+
+
+def suite_long():
+    """Longer training on the ideal channel, to check the attack and defense findings away from the
+    under-trained regime of the 40-round runs."""
+    jobs = []
+    for seed in range(2):
+        for agg, attacks in (("fedavg", ("none", "scale", "alie")), ("vqad", ("scale", "alie"))):
+            for atk in attacks:
+                jobs.append((f"long_{agg}_{atk}_s{seed}",
+                             base(seed=seed, attack=atk, aggregator=agg, pipeline="dense", rounds=100)))
+    return jobs
+
+
+SUITES = dict(alielocal=suite_alielocal, long=suite_long, sens=suite_sens, main=suite_main, keyrate=suite_keyrate, qber=suite_qber, finitekey=suite_finitekey,
               downlink=suite_downlink, qevsmall=suite_qevsmall, sparsity=suite_sparsity, ablation=suite_ablation)
 
 if __name__ == "__main__":

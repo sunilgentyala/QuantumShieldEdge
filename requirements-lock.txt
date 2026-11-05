@@ -1,0 +1,8 @@
+# Versions this repository is tested with (Python 3.14, Windows 11). requirements.txt holds the loose ranges.
+torch==2.11.0
+numpy==2.4.4
+scipy==1.17.1
+matplotlib==3.10.9
+pennylane==0.45.1
+pytest==9.0.3
+pillow==12.2.0

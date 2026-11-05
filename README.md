@@ -38,7 +38,7 @@ CIFAR-10, 50 leaves in 4 clusters, 40 rounds, 24,458-parameter CNN, 3 seeds, mea
 | Aggregator | No attack | Sign flip | Min-max |
 |:---|:---:|:---:|:---:|
 | FedAvg | 33.1 +- 2.0 | 25.3 +- 3.1 | 21.7 +- 2.6 |
-| Krum | 27.4 +- 2.6 | 25.8 +- 6.2 | 24.9 +- 3.0 |
+| Krum | 26.5 +- 2.2 | 26.4 +- 4.3 | 22.5 +- 11.1 |
 | Trimmed mean | 31.1 +- 1.8 | 23.5 +- 4.6 | 19.7 +- 4.5 |
 | MLP detector | 33.4 +- 1.4 | 31.3 +- 1.9 | 27.5 +- 6.3 |
 | VQAD (4-qubit circuit) | 33.1 +- 3.9 | 31.0 +- 0.8 | 26.9 +- 4.7 |
@@ -118,6 +118,24 @@ tests/          unit and integration tests
 experiments/    suite definitions, runner, analysis, figure scripts
 results/        raw per-run JSON, summary tables, figures
 ```
+
+## Additional studies
+
+| Study | Result |
+|---|---|
+| ALIE from cluster-local statistics (3 seeds) | FedAvg 32.9 +- 1.1, median 29.5 +- 3.4, VQAD 32.2 +- 0.9 test accuracy (%), within the intervals of the pooled-statistics attack |
+| 100 rounds on the ideal channel (2 seeds) | FedAvg 42.9 without attack; boosting drops it to 27.8 and 18.2; VQAD holds 44.8 and 42.3; ALIE leaves both unchanged |
+| Leave-one-attack-out on 5 independently regenerated fingerprint datasets | balanced accuracy VQAD 0.856 +- 0.034, MLP 0.714 +- 0.041, FourierMLP 0.768, FourierLinear 0.780, linear 0.416; VQAD above MLP in 5 of 5 replications |
+
+Reproduce with `python experiments/run_experiments.py alielocal|long`, `python experiments/independent_replications.py`
+and `python experiments/analyze_revision.py`. The Byzantine budget per cluster is one rule (`byz_budget`, 20% rounded to the
+nearest leaf, giving 3, 2, 3, 2) used for both the attacker count and the f that Krum assumes.
+
+## Security notice
+
+This is a research simulator. The QKD layer is emulated with a seeded pseudorandom stream, so nothing here protects
+real data. See [SECURITY.md](SECURITY.md) for what is and is not claimed, the hardening in the code, and how to
+report a vulnerability. `requirements-lock.txt` lists the tested dependency versions.
 
 ## Limitations
 

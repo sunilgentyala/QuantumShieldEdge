@@ -88,3 +88,49 @@ def test_bb84_detects_intercept_resend():
     assert 0.01 < clean.qber_est < 0.035 and not clean.aborted
     full = run_bb84(100_000, 0.02, rng, eve_fraction=1.0)
     assert 0.22 < full.qber_est < 0.30 and full.aborted  # theoretical 25% + channel noise
+
+
+def test_malformed_payloads_are_rejected_not_trusted():
+    import struct
+    import pytest
+    from qse.crypto import otp_wc as ow
+    P = 24_458
+    with pytest.raises(ow.FormatError):
+        ow.unpack_sparse(b"\x00" * 4, P)                                  # truncated header
+    with pytest.raises(ow.FormatError):
+        ow.unpack_sparse(struct.pack("<III", 0, 10**9, 0), P)              # absurd entry count
+    with pytest.raises(ow.FormatError):
+        ow.unpack_sparse(struct.pack("<III", 0, 5, 0) + b"\x00", P)        # length does not match header
+    bad_idx = ow.pack_sparse(0, np.array([P - 1]), np.array([1.0], dtype=np.float16), P)
+    ok = ow.unpack_sparse(bad_idx, P)
+    assert int(ok[1][0]) == P - 1
+    with pytest.raises(ow.FormatError):
+        ow.unpack_dense(struct.pack("<III", 0, 3, 1) + b"\x00" * 4, P)
+
+
+def test_open_sealed_rejects_short_and_mismatched_inputs():
+    import pytest
+    from qse.crypto import otp_wc as ow
+    key = (1 << 40) + 12345
+    with pytest.raises(ow.AuthError):
+        ow.open_sealed(b"abc", b"", b"\x00" * ow.TAG_BYTES, key)
+    msg = ow.seal(b"payload!", b"\x01" * 8, b"\x02" * ow.TAG_BYTES, key)
+    with pytest.raises(ow.AuthError):
+        ow.open_sealed(msg, b"\x01" * 7, b"\x02" * ow.TAG_BYTES, key)
+    with pytest.raises(ValueError):
+        ow.seal(b"x", b"\x01", b"\x02" * ow.TAG_BYTES, 0)                  # zero hash key is refused
+
+
+def test_data_loader_refuses_code_execution_pickles(tmp_path):
+    import pickle
+    import pytest
+    from qse import data
+
+    class Evil:
+        def __reduce__(self):
+            import os
+            return (os.system, ("echo pwned",))
+
+    (tmp_path / "bad").write_bytes(pickle.dumps({b"data": Evil()}))
+    with pytest.raises(pickle.UnpicklingError):
+        data._RestrictedUnpickler(open(tmp_path / "bad", "rb"), encoding="bytes").load()

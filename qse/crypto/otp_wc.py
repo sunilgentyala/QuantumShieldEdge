@@ -8,6 +8,7 @@ information-theoretic given uniformly random, secret, never-reused key bits.
 
 from __future__ import annotations
 
+import hmac
 import struct
 
 import numpy as np
@@ -33,22 +34,40 @@ class AuthError(Exception):
     pass
 
 
+class FormatError(ValueError):
+    """A (decrypted) payload is malformed: wrong length, out-of-range header or index."""
+
+
 def xor_bytes(a: bytes, b: bytes) -> bytes:
-    assert len(a) == len(b)
+    if len(a) != len(b):  # explicit check: an assert would be removed under python -O
+        raise ValueError("xor_bytes: length mismatch")
     return (np.frombuffer(a, np.uint8) ^ np.frombuffer(b, np.uint8)).tobytes()
+
+
+def _check_mac_key(mac_key: int) -> None:
+    if not (1 <= mac_key < P61):
+        raise ValueError("mac_key must be in [1, 2^61 - 2]")
 
 
 def seal(payload: bytes, key_pad: bytes, tag_pad: bytes, mac_key: int) -> bytes:
     """Return ciphertext || tag. key_pad has len(payload) bytes, tag_pad has TAG_BYTES bytes."""
+    _check_mac_key(mac_key)
+    if len(tag_pad) != TAG_BYTES:
+        raise ValueError("tag_pad must be exactly TAG_BYTES")
     ct = xor_bytes(payload, key_pad)
     t = poly_hash(ct, mac_key) ^ int.from_bytes(tag_pad, "little")
     return ct + t.to_bytes(TAG_BYTES, "little")
 
 
 def open_sealed(msg: bytes, key_pad: bytes, tag_pad: bytes, mac_key: int) -> bytes:
+    _check_mac_key(mac_key)
+    if len(msg) < TAG_BYTES or len(tag_pad) != TAG_BYTES:
+        raise AuthError("message too short")
     ct, tag = msg[:-TAG_BYTES], msg[-TAG_BYTES:]
-    expect = poly_hash(ct, mac_key) ^ int.from_bytes(tag_pad, "little")
-    if expect != int.from_bytes(tag, "little"):
+    if len(key_pad) != len(ct):
+        raise AuthError("pad length mismatch")
+    expect = (poly_hash(ct, mac_key) ^ int.from_bytes(tag_pad, "little")).to_bytes(TAG_BYTES, "little")
+    if not hmac.compare_digest(expect, tag):  # constant-time comparison; decrypt only after verification
         raise AuthError("tag mismatch")
     return xor_bytes(ct, key_pad)
 
@@ -69,12 +88,20 @@ def pack_sparse(round_id: int, idx: np.ndarray, val: np.ndarray, n_params: int) 
 
 def unpack_sparse(data: bytes, n_params: int):
     ib = index_bits(n_params)
+    if len(data) < HEADER_BYTES:
+        raise FormatError("truncated header")
     round_id, n, _ = struct.unpack("<III", data[:HEADER_BYTES])
+    if n > n_params:
+        raise FormatError("entry count exceeds the parameter count")
     n_idx_bytes = (n * ib + 7) // 8
+    if len(data) != HEADER_BYTES + n_idx_bytes + 2 * n:
+        raise FormatError("payload length does not match the header")
     ib_data = np.frombuffer(data[HEADER_BYTES:HEADER_BYTES + n_idx_bytes], np.uint8)
     bits = np.unpackbits(ib_data, bitorder="little")[: n * ib].reshape(n, ib).astype(np.uint64)
     idx = (bits << np.arange(ib, dtype=np.uint64)).sum(1).astype(np.int64)
     val = np.frombuffer(data[HEADER_BYTES + n_idx_bytes:HEADER_BYTES + n_idx_bytes + 2 * n], dtype="<f2")
+    if n and int(idx.max()) >= n_params:
+        raise FormatError("index out of range")
     return round_id, idx, val.astype(np.float32)
 
 
@@ -82,8 +109,12 @@ def pack_dense(round_id: int, val: np.ndarray) -> bytes:
     return struct.pack("<III", round_id, len(val), 1) + val.astype("<f2").tobytes()
 
 
-def unpack_dense(data: bytes):
+def unpack_dense(data: bytes, n_params: int | None = None):
+    if len(data) < HEADER_BYTES:
+        raise FormatError("truncated header")
     round_id, n, _ = struct.unpack("<III", data[:HEADER_BYTES])
+    if len(data) != HEADER_BYTES + 2 * n or (n_params is not None and n != n_params):
+        raise FormatError("payload length does not match the header")
     return round_id, np.frombuffer(data[HEADER_BYTES:HEADER_BYTES + 2 * n], dtype="<f2").astype(np.float32)
 
 

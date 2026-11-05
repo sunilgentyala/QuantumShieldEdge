@@ -17,6 +17,7 @@ security only; counted as a non-information-theoretic round).
 
 from __future__ import annotations
 
+import hmac
 import math
 import time
 from dataclasses import dataclass, field, asdict
@@ -34,6 +35,14 @@ from .qkd.keypool import LinkConfig, QKDLink
 from .vqad.features import fingerprints
 
 _DATA = {}
+
+
+def byz_budget(frac: float, n: int) -> int:
+    """Per-cluster Byzantine budget: frac * n rounded half up to a whole leaf.
+
+    The same number is used for the attacker count and for the f that Krum assumes, so the threat model and the
+    defense agree (20% of clusters of 13 and 12 leaves gives 3 and 2)."""
+    return int(math.floor(frac * n + 0.5))
 
 
 def get_data():
@@ -55,7 +64,7 @@ class SimConfig:
     batch_size: int = 32
     lr: float = 0.05
     byz_frac: float = 0.2
-    attack: str = "none"             # none | sign_flip | scale | label_flip | alie | min_max
+    attack: str = "none"             # none | sign_flip | scale | label_flip | alie | min_max | alie_local
     aggregator: str = "fedavg"       # see defenses.AGGREGATORS
     detector_path: str | None = None  # npz with detector weights for vqad/mlp/linear
     flagged_weight: float = 0.1
@@ -108,9 +117,9 @@ class Simulation:
         self.parts = dirichlet_partition(self.ytr.numpy(), cfg.n_clients, cfg.alpha, self.rng)
         self.clusters = assign_clusters(cfg.n_clients, list(cfg.cluster_sizes), self.rng)
         self.byz = np.zeros(cfg.n_clients, dtype=bool)
+        self.budget = [byz_budget(cfg.byz_frac, len(c)) for c in self.clusters]
         if cfg.attack != "none":
-            for c in self.clusters:
-                k = int(round(cfg.byz_frac * len(c)))
+            for c, k in zip(self.clusters, self.budget):
                 self.byz[self.rng.choice(c, k, replace=False)] = True
         self.model = SmallCNN(cfg.widths)
         self.P = n_params(self.model)
@@ -194,7 +203,8 @@ class Simulation:
         link = self.links[i]
         kp, tp = link.ean_pool.take(len(payload)), link.ean_pool.take(ow.TAG_BYTES)
         kp2, tp2 = link.cloud_pool.take(len(payload)), link.cloud_pool.take(ow.TAG_BYTES)
-        assert kp == kp2 and tp == tp2 and kp is not None, "pool desynchronised"
+        if kp is None or kp != kp2 or tp != tp2:
+            raise RuntimeError("key pools desynchronised")
         msg = ow.seal(payload, kp, tp, self.mac_keys[i])
         return msg, kp, tp
 
@@ -224,7 +234,16 @@ class Simulation:
                 flip = bool(self.byz[j] and c.attack == "label_flip")
                 U[j] = _train_leaf(self.model, self.w_hat[i], self.xtr[idx], self.ytr[idx], c, self.gen, flip)
         # ---- model poisoning (omniscient adversary sees honest updates)
-        if c.attack in ("sign_flip", "scale", "alie", "min_max"):
+        if c.attack == "alie_local":
+            # cluster-local ALIE: statistics, n and m come from the updates the attacked EAN actually receives
+            for cl in self.clusters:
+                mask = torch.from_numpy(self.byz[cl])
+                if int(mask.sum()) == 0:
+                    continue
+                mal = atk.craft("alie", U[cl][~mask], None, len(cl), int(mask.sum()))
+                for j in np.asarray(cl)[mask.numpy()]:
+                    U[j] = mal
+        elif c.attack in ("sign_flip", "scale", "alie", "min_max"):
             honest = U[~torch.from_numpy(self.byz)]
             nb = int(self.byz.sum())
             if c.attack in ("alie", "min_max"):
@@ -245,7 +264,7 @@ class Simulation:
         dens_eff = []
         for i, cl in enumerate(self.clusters):
             Uc = U[cl]
-            f_assumed = max(1, int(math.ceil(c.byz_frac * len(cl))))
+            f_assumed = max(1, self.budget[i])
             agg, wt, flags = AGGREGATORS[c.aggregator](
                 Uc, ns[cl], f=f_assumed, detector=self.detector, flagged_weight=c.flagged_weight)
             truth = self.byz[cl]
@@ -320,7 +339,11 @@ class Simulation:
                     else:
                         msg, kp, tpd = self._send(i, payload)
                         key_down += 8 * (len(payload) + ow.TAG_BYTES)
-                        _, gi, gv = ow.unpack_sparse(ow.open_sealed(msg, kp, tpd, self.mac_keys[i]), P)
+                        try:
+                            _, gi, gv = ow.unpack_sparse(ow.open_sealed(msg, kp, tpd, self.mac_keys[i]), P)
+                        except ow.AuthError:  # fail closed: the EAN keeps its old replica for this round
+                            self.log["auth_fail"] += 1
+                            continue
                         self.log["macs_verified"] += 1
                     upd = torch.zeros(P)
                     upd[torch.from_numpy(gi)] = torch.from_numpy(gv)
@@ -331,18 +354,24 @@ class Simulation:
                     elif c.down_mode == "dense_otp":
                         msg, kp, tpd = self._send(i, payload)
                         key_down += 8 * (len(payload) + ow.TAG_BYTES)
-                        _, gv = ow.unpack_dense(ow.open_sealed(msg, kp, tpd, self.mac_keys[i]))
+                        try:
+                            _, gv = ow.unpack_dense(ow.open_sealed(msg, kp, tpd, self.mac_keys[i]), P)
+                        except ow.AuthError:  # fail closed
+                            self.log["auth_fail"] += 1
+                            continue
                         self.log["macs_verified"] += 1
                     else:  # mac_only: authenticated, NOT confidential
                         link = self.links[i]
                         pad_s, pad_r = link.ean_pool.take(ow.TAG_BYTES), link.cloud_pool.take(ow.TAG_BYTES)
-                        tag = ow.poly_hash(payload, self.mac_keys[i]) ^ int.from_bytes(pad_s, "little")
-                        if ow.poly_hash(payload, self.mac_keys[i]) ^ int.from_bytes(pad_r, "little") != tag:
-                            self.log["auth_fail"] += 1
-                        else:
-                            self.log["macs_verified"] += 1
+                        h = ow.poly_hash(payload, self.mac_keys[i])
+                        tag = (h ^ int.from_bytes(pad_s, "little")).to_bytes(ow.TAG_BYTES, "little")
+                        expect = (h ^ int.from_bytes(pad_r, "little")).to_bytes(ow.TAG_BYTES, "little")
                         key_down += 8 * ow.TAG_BYTES
-                        _, gv = ow.unpack_dense(payload)
+                        if not hmac.compare_digest(tag, expect):  # fail closed: drop the unauthenticated update
+                            self.log["auth_fail"] += 1
+                            continue
+                        self.log["macs_verified"] += 1
+                        _, gv = ow.unpack_dense(payload, P)
                     upd = torch.from_numpy(gv.copy())
                 self.w_hat[i] = self.w_hat[i] + upd
 

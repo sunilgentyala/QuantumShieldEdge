@@ -1,10 +1,10 @@
 # Versions this repository is tested with (31 tests pass on Python 3.14 and in CI on 3.12 and 3.13; pip-audit clean).
 # requirements.txt holds the loose ranges; CI installs this file so that the pins are what is tested.
-torch==2.13.0
+torch==2.15.0
 numpy==2.5.4
 scipy==1.18.1
 matplotlib==3.11.2
 pennylane==0.45.1
 pytest==9.2.0
 pillow==13.0.0
-setuptools==84.1.0
+setuptools==84.2.1

@@ -33,7 +33,7 @@ to a cloud aggregator over a link keyed from quantum key distribution (QKD); the
 ## Key results
 
 Every number below is produced by the code in this repository and regenerated from `results/raw/` by `experiments/analyze.py`.
-CIFAR-10, 50 leaves in 4 clusters, 40 rounds, 24,458-parameter CNN, 3 seeds, mean +- std of final accuracy (%).
+CIFAR-10, 50 leaves in 4 clusters, 40 rounds, 24,458-parameter CNN, 3 seeds, mean +- 95% t-interval of final accuracy (%).
 
 | Aggregator | No attack | Sign flip | Min-max |
 |:---|:---:|:---:|:---:|
@@ -52,6 +52,7 @@ CIFAR-10, 50 leaves in 4 clusters, 40 rounds, 24,458-parameter CNN, 3 seeds, mea
 - **The QKD cost is exact and measurable.** A link needs 76,096 key bits per round at 5% sparsity. When key supply falls to
   0.14x of demand, `adapt` keeps 92% of messages one-time-pad protected, `wait` keeps 100% at the price of delay, `defer`
   collapses to chance accuracy, and `pq` keeps accuracy but exposes most traffic to post-quantum-only protection.
+- **The detector gain replicates on held-out seeds.** On five further seeds (10 to 14, 45 runs, `experiments/holdout_seeds.py`), pooled with the main matrix over 8 seeds, detector weighting beats FedAvg by about 4 points under sign flip and min-max (VQAD above FedAvg on 8 of 8 seeds in both), loses about 1.8 points under the boosted-update attack, and the circuit and the MLP stay indistinguishable (`experiments/holdout_analysis.py`).
 - **Label flipping is not detected** by any model here (detection at chance).
 
 <p align="center">

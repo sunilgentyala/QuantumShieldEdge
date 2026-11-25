@@ -8,17 +8,14 @@ authors:
   affiliation: HCLTech (HCL America Inc.), Dallas, TX, USA
   orcid: https://orcid.org/0009-0005-2642-3479
   email: sunil.gentyala@ieee.org
-- family-names: Padala
-  given-names: S. M. Krishna Reddy
-  affiliation: Aditya University, Surampalem, Andhra Pradesh, India
-- family-names: Kasturi
-  given-names: Akhila
-  affiliation: Independent Researcher, India
-  orcid: https://orcid.org/0009-0006-8353-3989
 - family-names: Caprio
   given-names: Floriano
 - family-names: Darisi
   given-names: Suresh Kumar
+- family-names: Kasturi
+  given-names: Akhila
+  affiliation: Independent Researcher, Dallas, TX, USA
+  orcid: https://orcid.org/0009-0006-8353-3989
 repository-code: https://github.com/sunilgentyala/QuantumShieldEdge
 license: MIT
 abstract: Research simulator for QKD-keyed hierarchical federated learning with Byzantine-aware
